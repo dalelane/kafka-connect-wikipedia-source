@@ -87,7 +87,10 @@ public class WikipediaRecordFactory {
     public Instant getPersistedOffset(OffsetStorageReader offsetReader) {
         log.debug("retrieving persisted offset for previously produced events");
 
-        Instant defaultOffset = Instant.now().minus(1L, ChronoUnit.DAYS);
+        Instant defaultOffset = Instant
+            .now()
+            .truncatedTo(ChronoUnit.SECONDS)
+            .minus(1L, ChronoUnit.DAYS);
 
         if (offsetReader == null) {
             log.debug("no offset reader available");
