@@ -65,7 +65,7 @@ public class WikipediaRecordFactory {
     }
 
     private Map<String, Object> createSourcePartition() {
-        return null;
+        return Collections.emptyMap();
     }
 
     private static final String SOURCE_OFFSET = "timestamp";
