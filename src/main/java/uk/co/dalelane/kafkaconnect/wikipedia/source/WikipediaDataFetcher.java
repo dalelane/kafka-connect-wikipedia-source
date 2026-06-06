@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URI;
+import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -109,10 +110,11 @@ public class WikipediaDataFetcher implements Runnable {
             "rcstart=" + offset.plusSeconds(1).toString();
         log.info("fetching {}", url);
 
-        InputStream apiStream = URI.create(url)
+        URLConnection connection = URI.create(url)
             .toURL()
-            .openConnection()
-            .getInputStream();
+            .openConnection();
+        connection.setRequestProperty("User-Agent", "Kafka-Connect-Wikipedia-Source/0.0.3 github.com/dalelane/kafka-connect-wikipedia-source");
+        InputStream apiStream = connection.getInputStream();
         Reader apiReader = new InputStreamReader(apiStream, StandardCharsets.UTF_8);
 
         return apiResponseParser.fromJson(apiReader, WikipediaEdits.class)
